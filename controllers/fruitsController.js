@@ -9,29 +9,37 @@ const fruits = require('../models/Fruit');
 
 // INDEX Fruits
 router.get('/', (req, res) => {
-  // console.log(fruits);
-  // res.send(fruits);
   res.render('fruits/indexFruit', {
-    fruits: fruits,
+    fruits: fruits
   });
 });
 
+// NEW Fruits
+router.get('/new', (req, res) => {
+  res.render('fruits/newFruit');
+});
+
+// CREATE Fruits
+router.post('/', (req, res) => {
+  console.log(req.body);
+  res.send('<h1>Data received</h1>');
+});
 
 // SHOW Fruits
 router.get('/:fruitIndex', (req, res) => {
   const fruitIndex = req.params.fruitIndex;
   const fruit = fruits[fruitIndex];
 
-  // if (fruits[fruitIndex]) {
-  //   res.send(fruits[fruitIndex]);
-  // } else {
-  //   res.send('Sorry, that fruit does not exist');
-  // }
-
-
-  res.render('fruits/showFruit', {
-    fruit: fruit,
-  });
+  if (fruits[fruitIndex]) {
+    res.render('fruits/showFruit', {
+      fruit: fruit,
+    });
+  } else {
+    res.render('fruits/showFruit', {
+      fruit: {name: 'Does not exist'},
+    });
+  }
 });
+
 
 module.exports = router;

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+</head>
+<body>
+  <h1>Add New Fruit</h1>
+
+  <form action="/fruits" method="POST">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" />
+    </div>
+
+    <div>
+      <label for="color">Color</label>
+      <input type="text" id="color" name="color" />
+    </div>
+
+    <div>
+      <label for="readyToEat">Ready To Eat?</label>
+      <input type="checkbox" id="readyToEat" name="readyToEat" />
+    </div>
+
+    <!-- <button type="submit">Add Fruit</button> -->
+    <input type="submit" value="Add Fruit" />
+  </form>
+
+</body>
+</html>
