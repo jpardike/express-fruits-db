@@ -10,7 +10,10 @@ const fruits = require('../models/Fruit');
 // INDEX Fruits
 router.get('/', (req, res) => {
   // console.log(fruits);
-  res.send(fruits);
+  // res.send(fruits);
+  res.render('fruits/indexFruit', {
+    fruits: fruits,
+  });
 });
 
 
