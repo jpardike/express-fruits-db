@@ -2,32 +2,22 @@ const express = require('express');
 const app = express();
 const PORT = 4000;
 
-// Fruits Collection
-const fruits = ['apple', 'banana', 'pear'];
+// Set View Engine
+app.set('view engine', 'ejs');
+
+// Fruits Controller
+const fruitsCtrl = require('./controllers/fruitsController');
+const fruits = require('./models/Fruit');
 
 // Home Route
 app.get('/', (req, res) => {
-  res.send('<h1>Welcome to Express Fruits</h1>');
+  // res.sendFile();
+  // res.send('<h1>Welcome to Express Fruits</h1>');
+  res.render('index');
 });
 
-// INDEX Fruits
-app.get('/fruits', (req, res) => {
-  console.log(fruits);
-  res.send(fruits);
-});
-
-// SHOW Fruits
-app.get('/fruits/:fruitIndex', (req, res) => {
-  const fruitIndex = req.params.fruitIndex;
-
-  if (fruits[fruitIndex]) {
-    res.send(fruits[fruitIndex]);
-  } else {
-    res.send('Sorry, that fruit does not exist');
-  }
-
-});
-
+// Fruits Routes
+app.use('/fruits', fruitsCtrl);
 
 // Listener
 app.listen(PORT, () => console.log(`Server started successfully on port ${PORT}`));
