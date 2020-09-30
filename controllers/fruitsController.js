@@ -22,7 +22,16 @@ router.get('/new', (req, res) => {
 // CREATE Fruits
 router.post('/', (req, res) => {
   console.log(req.body);
-  res.send('<h1>Data received</h1>');
+  
+  // Update readyToEat to a boolean value
+  if (req.body.readyToEat === 'on') {
+    req.body.readyToEat = true;
+  } else {
+    req.body.readyToEat = false;
+  }
+
+  fruits.push(req.body);
+  res.redirect(`/fruits/${fruits.length - 1}`);
 });
 
 // SHOW Fruits
