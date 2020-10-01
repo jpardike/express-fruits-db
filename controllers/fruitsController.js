@@ -21,16 +21,20 @@ router.get('/new', (req, res) => {
 
 // CREATE Fruits
 router.post('/', (req, res) => {
-  console.log(req.body);
-  
   // Update readyToEat to a boolean value
-  if (req.body.readyToEat === 'on') {
-    req.body.readyToEat = true;
-  } else {
-    req.body.readyToEat = false;
-  }
+  // if (req.body.readyToEat === 'on') {
+  //   req.body.readyToEat = true;
+  // } else {
+  //   req.body.readyToEat = false;
+  // }
+    
+  const newFruit = {
+    name: req.body.name,
+    color: req.body.color,
+    readyToEat: req.body.readyToEat === 'on'
+  };
 
-  fruits.push(req.body);
+  fruits.push(newFruit);
   res.redirect(`/fruits/${fruits.length - 1}`);
 });
 
@@ -53,11 +57,7 @@ router.get('/:fruitIndex', (req, res) => {
 
 // REMOVE Fruits
 router.delete('/:fruitIndex', (req, res) => {
-  console.log(fruits);
-
   fruits.splice(req.params.fruitIndex, 1);
-
-  console.log(fruits);
 
   res.redirect('/fruits');
 });
@@ -74,13 +74,18 @@ router.get('/:fruitIndex/edit', (req, res) => {
 // UPDATE Fruits
 router.put('/:fruitIndex', (req, res) => {
   // GET DATA FROM REQUEST BODY
-  console.log(req.body);
+  const fruitIndex = req.params.fruitIndex;
+  const newFruit = {
+    name: req.body.name,
+    color: req.body.color,
+    readyToEat: req.body.readyToEat === 'on'
+  };
 
   // UPDATE FRUIT IN DATABASE
-  
-  // REDIRECT TO SHOW FRUIT FOR PARTICULAR FRUIT
+  fruits.splice(fruitIndex, 1, newFruit);
 
-  res.send('put made to /:fruitIndex');
+  // REDIRECT TO SHOW FRUIT FOR PARTICULAR FRUIT
+  res.redirect(`/fruits/${fruitIndex}`);
 });
 
 module.exports = router;
