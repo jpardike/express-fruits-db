@@ -29,6 +29,13 @@
     <p>This fruit is not ready to eat</p>
   <% } %>
   
+  <form action="/fruits/<%= fruitIndex %>?_method=DELETE" method="POST">
+    <input type="submit" value="Delete Fruit" />
+  </form>
+
+  <form action="/fruits/<%= fruitIndex %>/edit" method="GET">
+    <input type="submit" value="Edit Fruit" />
+  </form>
 
   <!-- Non-Rendering Tag -->
   <% if (true) '<p>Hello</p>' %>

@@ -42,6 +42,7 @@ router.get('/:fruitIndex', (req, res) => {
   if (fruits[fruitIndex]) {
     res.render('fruits/showFruit', {
       fruit: fruit,
+      fruitIndex: fruitIndex
     });
   } else {
     res.render('fruits/showFruit', {
@@ -50,5 +51,36 @@ router.get('/:fruitIndex', (req, res) => {
   }
 });
 
+// REMOVE Fruits
+router.delete('/:fruitIndex', (req, res) => {
+  console.log(fruits);
+
+  fruits.splice(req.params.fruitIndex, 1);
+
+  console.log(fruits);
+
+  res.redirect('/fruits');
+});
+
+router.get('/:fruitIndex/edit', (req, res) => {
+  const fruitIndex = req.params.fruitIndex;
+
+  res.render('fruits/editFruit', {
+    fruit: fruits[fruitIndex],
+    fruitIndex: fruitIndex
+  });
+});
+
+// UPDATE Fruits
+router.put('/:fruitIndex', (req, res) => {
+  // GET DATA FROM REQUEST BODY
+  console.log(req.body);
+
+  // UPDATE FRUIT IN DATABASE
+  
+  // REDIRECT TO SHOW FRUIT FOR PARTICULAR FRUIT
+
+  res.send('put made to /:fruitIndex');
+});
 
 module.exports = router;
