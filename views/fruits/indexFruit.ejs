@@ -19,7 +19,7 @@
     
     <% for (let i = 0; i < fruits.length; i++) { %>
       <li style="margin-bottom: 20px;">
-        <a href="/fruits/<%= i %>">
+        <a href="/fruits/<%= fruits[i]._id %>">
           <%= fruits[i].name %>
         </a>    
       </li>

@@ -1,20 +1,18 @@
-const fruits = [
-  {
-    name: "apple",
-    color: "red",
-    readyToEat: true,
-  },
-  {
-    name: "pear",
-    color: "green",
-    readyToEat: false,
-  },
-  {
-    name: "banana",
-    color: "yellow",
-    readyToEat: true,
-  }
-];
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-// Fruits must be exported to be available outside of this file
-module.exports = fruits;
+// Blueprint (Keeps our data consistent)
+const fruitSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  color: String,
+  readyToEat: Boolean,
+}, {timestamps: true});
+
+
+// Fruit Model allows us to query the Fruit collection
+const Fruit = mongoose.model('Fruit', fruitSchema);
+
+module.exports = Fruit;

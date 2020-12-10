@@ -1,91 +1,113 @@
 // const router = require('express').Router();
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 // Fruits Model
-const fruits = require('../models/Fruit');
+const db = require("../models");
 
 // CURRENT PATH = '/fruits'
 
 // INDEX Fruits
-router.get('/', (req, res) => {
-  res.render('fruits/indexFruit', {
-    fruits: fruits
+router.get("/", (req, res) => { // Route handler (Express)
+
+  // Query the DB for all fruits (Mongoose)
+  db.Fruit.find({}, (err, allFruits) => {
+    console.log(allFruits);
+
+    // Always Handle Error First
+    if (err) {
+      console.log(err);
+    }
+
+    res.render("fruits/indexFruit", { // Response (Express)
+      fruits: allFruits,
+    });
   });
 });
 
 // NEW Fruits
-router.get('/new', (req, res) => {
-  res.render('fruits/newFruit');
+router.get("/new", (req, res) => {
+  res.render("fruits/newFruit");
 });
 
 // CREATE Fruits
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   // Update readyToEat to a boolean value
   // if (req.body.readyToEat === 'on') {
   //   req.body.readyToEat = true;
   // } else {
   //   req.body.readyToEat = false;
   // }
-    
-  const newFruit = {
-    name: req.body.name,
-    color: req.body.color,
-    readyToEat: req.body.readyToEat === 'on'
-  };
 
-  fruits.push(newFruit);
-  res.redirect(`/fruits/${fruits.length - 1}`);
-});
+  // const newFruit = {
+  //   name: req.body.name,
+  //   color: req.body.color,
+  //   readyToEat: req.body.readyToEat === "on",
+  // };
 
-// SHOW Fruits
-router.get('/:fruitIndex', (req, res) => {
-  const fruitIndex = req.params.fruitIndex;
-  const fruit = fruits[fruitIndex];
+  req.body.readyToEat = req.body.readyToEat === 'on';
 
-  if (fruits[fruitIndex]) {
-    res.render('fruits/showFruit', {
-      fruit: fruit,
-      fruitIndex: fruitIndex
-    });
-  } else {
-    res.render('fruits/showFruit', {
-      fruit: {name: 'Does not exist'},
-    });
-  }
-});
+  db.Fruit.create(req.body, (err, newFruit) => {
+    if (err) return console.log(err);
 
-// REMOVE Fruits
-router.delete('/:fruitIndex', (req, res) => {
-  fruits.splice(req.params.fruitIndex, 1);
+    res.redirect(`/fruits/${newFruit._id}`);
 
-  res.redirect('/fruits');
-});
-
-router.get('/:fruitIndex/edit', (req, res) => {
-  const fruitIndex = req.params.fruitIndex;
-
-  res.render('fruits/editFruit', {
-    fruit: fruits[fruitIndex],
-    fruitIndex: fruitIndex
   });
 });
 
+// SHOW Fruits
+router.get("/:fruitId", (req, res) => {
+  // Query DB for fruit by ID
+  db.Fruit.findById(req.params.fruitId, (err, foundFruit) => {
+    // Always Handle the Error FIRST!!!
+    if (err) return console.log(err);
+    // Express Response
+    res.render('fruits/showFruit', {
+      fruit: foundFruit,
+    });
+  });
+});
+
+// REMOVE Fruits
+router.delete("/:fruitId", (req, res) => {
+  // Query the Fruit Model to delete fruit by ID
+  db.Fruit.findByIdAndDelete(req.params.fruitId, (err, deletedFruit) => {
+    if (err) return console.log(err);
+    res.redirect("/fruits");
+  });
+});
+
+// EDIT Fruit
+router.get("/:fruitId/edit", (req, res) => {
+  
+  // Query the Fruit collection for fruit by ID
+  db.Fruit.findById(req.params.fruitId, (err, foundFruit) => {
+    if (err) return console.log(err);
+
+    res.render("fruits/editFruit", {
+      fruit: foundFruit,
+    });
+  });
+
+});
+
 // UPDATE Fruits
-router.put('/:fruitIndex', (req, res) => {
-  // GET DATA FROM REQUEST BODY
-  const fruitIndex = req.params.fruitIndex;
-  const newFruit = {
-    name: req.body.name,
-    color: req.body.color,
-    readyToEat: req.body.readyToEat === 'on'
-  };
+router.put("/:fruitId", (req, res) => {
+  // Update readyToEat to Boolean
+  req.body.readyToEat = req.body.readyToEat === 'on';
 
-  // UPDATE FRUIT IN DATABASE
-  fruits.splice(fruitIndex, 1, newFruit);
-
-  // REDIRECT TO SHOW FRUIT FOR PARTICULAR FRUIT
-  res.redirect(`/fruits/${fruitIndex}`);
+  // Query Fruit collection by ID and Update
+  db.Fruit.findByIdAndUpdate(
+    req.params.fruitId, // ID to find record by
+    req.body, // new data for record
+    {new: true}, // return updated record (as opposed to original record)
+    (err, updatedFruit) => { // Callback
+      if (err) return console.log(err);
+      
+      // REDIRECT TO SHOW FRUIT FOR PARTICULAR FRUIT
+      res.redirect(`/fruits/${updatedFruit._id}`);
+    }
+  );
 });
 
 module.exports = router;
